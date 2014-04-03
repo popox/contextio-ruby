@@ -33,10 +33,10 @@ class ContextIO
     # As of this writing, the documented valid flags are: seen, answered,
     # flagged, deleted, and draft. However, this will send whatever you send it.
     def set_flags(flag_hash)
-      args = flag_hash.map({}) do |memo, (flag_name, value)|
-        memo[flag_name] = value ? 1 : 0
-        memo
+      args = flag_hash.map do |k, v|
+        k,v = k,(v ? 1 : 0)
       end
+      args = Hash[args].merge({:dst_folder => folders.first})
 
       api.request(:post, resource_url, args)['success']
     end
